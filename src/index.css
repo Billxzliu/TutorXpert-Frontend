@@ -1,0 +1,125 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 224 71% 4%; /* Dark Blue/Black */
+    --foreground: 210 40% 98%; /* Light Gray/White */
+    --card: 224 71% 10%; /* Slightly Lighter Dark Blue */
+    --card-foreground: 210 40% 98%;
+    --popover: 224 71% 8%; /* Darker Popover */
+    --popover-foreground: 210 40% 98%;
+    --primary: 198 93% 60%; /* Bright Cyan */
+    --primary-foreground: 224 71% 4%; /* Dark Blue for text on primary */
+    --secondary: 260 100% 75%; /* Vibrant Purple */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 224 71% 15%; /* Muted Dark Blue */
+    --muted-foreground: 210 40% 70%; /* Muted Light Gray */
+    --accent: 198 93% 50%; /* Slightly Darker Cyan for accents */
+    --accent-foreground: 224 71% 4%;
+    --destructive: 0 72% 51%; /* Bright Red */
+    --destructive-foreground: 210 40% 98%;
+    --border: 224 71% 20%; /* Darker Border */
+    --input: 224 71% 12%; /* Dark Input Background */
+    --ring: 198 93% 60%; /* Bright Cyan for rings */
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 210 40% 98%;
+    --card: 224 71% 10%;
+    --card-foreground: 210 40% 98%;
+    --popover: 224 71% 8%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 198 93% 60%;
+    --primary-foreground: 224 71% 4%;
+    --secondary: 260 100% 75%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 224 71% 15%;
+    --muted-foreground: 210 40% 70%;
+    --accent: 198 93% 50%;
+    --accent-foreground: 224 71% 4%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 224 71% 20%;
+    --input: 224 71% 12%;
+    --ring: 198 93% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif; /* Modern sans-serif font */
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+}
+
+.card-hover {
+  transition: all 0.3s ease-in-out;
+  @apply shadow-lg;
+}
+
+.card-hover:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 15px 30px -10px hsla(var(--primary), 0.5);
+  @apply ring-2 ring-primary/50;
+}
+
+.hero-gradient {
+  background: radial-gradient(ellipse at bottom, hsl(var(--background)) 0%, hsla(var(--primary), 0.3) 100%);
+}
+
+.glass-effect {
+  background: hsla(var(--card), 0.5);
+  backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid hsla(var(--border), 0.3);
+  @apply rounded-xl shadow-2xl;
+}
+
+.tech-glow {
+  box-shadow: 0 0 15px hsla(var(--primary), 0.5), 0 0 30px hsla(var(--secondary), 0.3);
+}
+
+.animated-gradient-text {
+  background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--primary)));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-animation 5s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Custom scrollbar for a more tech feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: var(--radius);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--accent));
+}
