@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,7 @@ const NewProjectPage = () => {
     deadline: "",
     attachments: []
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
@@ -42,8 +41,7 @@ const NewProjectPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Validate form
+
     if (!formData.title || !formData.subject || !formData.description || !formData.budget || !formData.deadline) {
       toast({
         title: "Error",
@@ -53,10 +51,8 @@ const NewProjectPage = () => {
       setIsSubmitting(false);
       return;
     }
-    
-    // Simulate API call with setTimeout
+
     setTimeout(() => {
-      // Save to localStorage
       const projects = JSON.parse(localStorage.getItem("projects") || "[]");
       const newProject = {
         id: Date.now(),
@@ -64,17 +60,17 @@ const NewProjectPage = () => {
         postedBy: "You",
         postedDate: "Just now",
         status: "Open",
-        attachments: formData.attachments.map(file => file.name) // Just store file names for demo
+        attachments: formData.attachments.map(file => file.name)
       };
-      
+
       projects.push(newProject);
       localStorage.setItem("projects", JSON.stringify(projects));
-      
+
       toast({
         title: "Success!",
         description: "Your project has been posted successfully.",
       });
-      
+
       setIsSubmitting(false);
       navigate("/projects");
     }, 1500);
@@ -82,15 +78,11 @@ const NewProjectPage = () => {
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.5 }
-    }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-background to-card/30 text-foreground py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial="hidden"
@@ -98,8 +90,8 @@ const NewProjectPage = () => {
           variants={fadeIn}
           className="text-center mb-8"
         >
-          <h1 className="text-3xl font-bold mb-4">Post a New Project</h1>
-          <p className="text-lg text-gray-600">
+          <h1 className="text-3xl font-bold animated-gradient-text mb-4">Post a New Project</h1>
+          <p className="text-lg text-muted-foreground">
             Share the details of your academic project to find the perfect tutor.
           </p>
         </motion.div>
@@ -109,34 +101,23 @@ const NewProjectPage = () => {
           animate="visible"
           variants={fadeIn}
         >
-          <Card>
+          <Card className="bg-card/80 backdrop-blur-xl">
             <form onSubmit={handleSubmit}>
               <CardHeader>
-                <CardTitle>Project Details</CardTitle>
-                <CardDescription>
+                <CardTitle className="animated-gradient-text">Project Details</CardTitle>
+                <CardDescription className="text-muted-foreground">
                   Provide clear and detailed information to attract the right tutors.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="title">Project Title *</Label>
-                  <Input
-                    id="title"
-                    name="title"
-                    placeholder="E.g., Calculus Problem Set Help"
-                    value={formData.title}
-                    onChange={handleChange}
-                    required
-                  />
+                  <Input id="title" name="title" placeholder="E.g., Calculus Problem Set Help" value={formData.title} onChange={handleChange} required />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="subject">Subject *</Label>
-                  <Select 
-                    onValueChange={(value) => handleSelectChange("subject", value)}
-                    value={formData.subject}
-                    required
-                  >
+                  <Select onValueChange={(value) => handleSelectChange("subject", value)} value={formData.subject} required>
                     <SelectTrigger id="subject">
                       <SelectValue placeholder="Select a subject" />
                     </SelectTrigger>
@@ -154,28 +135,16 @@ const NewProjectPage = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="description">Project Description *</Label>
-                  <Textarea
-                    id="description"
-                    name="description"
-                    placeholder="Describe your project in detail. Include specific requirements, goals, and any relevant background information."
-                    rows={5}
-                    value={formData.description}
-                    onChange={handleChange}
-                    required
-                  />
+                  <Textarea id="description" name="description" placeholder="Describe your project in detail..." rows={5} value={formData.description} onChange={handleChange} required />
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="budget">Budget Range ($) *</Label>
-                    <Select 
-                      onValueChange={(value) => handleSelectChange("budget", value)}
-                      value={formData.budget}
-                      required
-                    >
+                    <Select onValueChange={(value) => handleSelectChange("budget", value)} value={formData.budget} required>
                       <SelectTrigger id="budget">
                         <SelectValue placeholder="Select budget range" />
                       </SelectTrigger>
@@ -190,14 +159,10 @@ const NewProjectPage = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="deadline">Deadline *</Label>
-                    <Select 
-                      onValueChange={(value) => handleSelectChange("deadline", value)}
-                      value={formData.deadline}
-                      required
-                    >
+                    <Select onValueChange={(value) => handleSelectChange("deadline", value)} value={formData.deadline} required>
                       <SelectTrigger id="deadline">
                         <SelectValue placeholder="Select deadline" />
                       </SelectTrigger>
@@ -213,34 +178,18 @@ const NewProjectPage = () => {
                     </Select>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="attachments">Attachments (Optional)</Label>
-                  <Input
-                    id="attachments"
-                    type="file"
-                    multiple
-                    onChange={handleFileChange}
-                    className="cursor-pointer"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <Input id="attachments" type="file" multiple onChange={handleFileChange} className="cursor-pointer" />
+                  <p className="text-xs text-muted-foreground mt-1">
                     Upload any relevant documents, instructions, or examples (Max 5 files, 10MB each).
                   </p>
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between">
-                <Button 
-                  type="button" 
-                  variant="outline"
-                  onClick={() => navigate("/projects")}
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  type="submit" 
-                  disabled={isSubmitting}
-                  className="min-w-[120px]"
-                >
+                <Button type="button" variant="outline" onClick={() => navigate("/projects")}>Cancel</Button>
+                <Button type="submit" disabled={isSubmitting} className="min-w-[120px]">
                   {isSubmitting ? (
                     <div className="flex items-center">
                       <div className="animate-spin mr-2 h-4 w-4 border-t-2 border-b-2 border-white rounded-full"></div>
