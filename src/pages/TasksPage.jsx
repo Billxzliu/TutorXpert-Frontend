@@ -9,6 +9,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Search, Filter, Calendar, DollarSign, BookOpen, Zap, PlusCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import mockTasks from "@/data/mockTasks";
+
 
 const TasksPage = () => {
   const { toast } = useToast();
@@ -18,25 +20,6 @@ const TasksPage = () => {
   const [subjectFilter, setSubjectFilter] = useState("");
   const [budgetFilter, setBudgetFilter] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
-const mockTasks = [
-  { id: 1, title: "Quantum Entanglement Simulation", subject: "Physics", description: "Develop a Python simulation for quantum entanglement phenomena. Requires strong understanding of quantum mechanics and linear algebra.", budget: "150-250", deadline: "10 days", postedBy: "StudentX92", postedDate: "3 hours ago", status: "Open" },
-  { id: 2, title: "Decentralized Voting System (Blockchain)", subject: "Computer Science", description: "Build a proof-of-concept decentralized voting application using Solidity and a modern JavaScript framework. Focus on security and transparency.", budget: "200-350", deadline: "14 days", postedBy: "CryptoLearn", postedDate: "1 day ago", status: "Open" },
-  { id: 3, title: "AI-Powered Creative Writing Assistant", subject: "Computer Science", description: "Fine-tune a GPT-style model for specific creative writing genres. Need help with dataset preparation and model training.", budget: "100-180", deadline: "7 days", postedBy: "FutureAuthor", postedDate: "5 hours ago", status: "Open" },
-  { id: 4, title: "CRISPR Gene Editing Protocol Design", subject: "Biology", description: "Design a detailed experimental protocol for a specific gene editing task using CRISPR-Cas9. Literature review and methodology required.", budget: "120-200", deadline: "12 days", postedBy: "BioInnovate", postedDate: "18 hours ago", status: "Open" },
-  { id: 5, title: "AR Historical Site Reconstruction", subject: "Engineering", description: "Create an augmented reality experience to reconstruct a local historical site. Requires Unity/Unreal Engine skills and 3D modeling.", budget: "250-400", deadline: "20 days", postedBy: "HistoryBuffAR", postedDate: "2 days ago", status: "Open" },
-  { id: 6, title: "Algorithmic Trading Bot Strategy", subject: "Economics", description: "Develop and backtest a novel algorithmic trading strategy for cryptocurrency markets. Python and financial modeling skills needed.", budget: "180-300", deadline: "15 days", postedBy: "QuantStudent", postedDate: "1 day ago", status: "Open" },
-  { id: 7, title: "Mathematics Olympiad Problem Set Design", subject: "Mathematics", description: "Create challenging and original problem sets for high school math competitions. Include solutions and difficulty ratings.", budget: "80-150", deadline: "5 days", postedBy: "MathNerd", postedDate: "4 hours ago", status: "Open" },
-  { id: 8, title: "Academic Essay Review - British Literature", subject: "English", description: "Proofread and provide critical feedback for an undergraduate essay on Victorian literature.", budget: "50-100", deadline: "3 days", postedBy: "LitMajor21", postedDate: "6 hours ago", status: "Open" },
-  { id: 9, title: "Chemical Reaction Simulation with Python", subject: "Chemistry", description: "Write code to simulate basic chemical kinetics and thermodynamics for a high school teaching demo.", budget: "100-200", deadline: "6 days", postedBy: "ChemGeek", postedDate: "10 hours ago", status: "Open" },
-  { id: 10, title: "Civil Engineering Bridge Design Report", subject: "Engineering", description: "Help prepare a professional report for a capstone civil engineering project. Focus on load analysis and CAD schematics.", budget: "150-250", deadline: "9 days", postedBy: "BuildMaster", postedDate: "1 day ago", status: "Open" },
-  { id: 11, title: "Timeline and Source Evaluation for WWII", subject: "History", description: "Construct a source-based timeline of key WWII events. Emphasis on critical analysis of primary documents.", budget: "90-130", deadline: "4 days", postedBy: "History4All", postedDate: "3 hours ago", status: "Open" },
-  { id: 12, title: "Design a Philosophy Logic Puzzle Set", subject: "Social Studies", description: "Create logic puzzles inspired by classic philosophical paradoxes and dilemmas. Suitable for classroom use.", budget: "70-120", deadline: "5 days", postedBy: "EthicsThinker", postedDate: "2 hours ago", status: "Open" },
-  { id: 13, title: "Experimental Design: Learning Styles in Children", subject: "Psychology", description: "Assist in designing a small-scale experiment evaluating the effectiveness of different teaching methods.", budget: "130-220", deadline: "7 days", postedBy: "EduLab", postedDate: "5 hours ago", status: "Open" },
-  { id: 14, title: "Survey Study on Mental Health in Teens", subject: "Psychology", description: "Support statistical analysis and reporting for a psychology survey study. SPSS or R experience preferred.", budget: "110-180", deadline: "8 days", postedBy: "MindMatters", postedDate: "9 hours ago", status: "Open" }
-];
-
-
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -201,16 +184,20 @@ const mockTasks = [
                       </CardHeader>
                       <CardContent className="py-2 flex-grow">
                         <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{task.description}</p>
-                        <div className="grid grid-cols-2 gap-3 text-sm">
-                          <div className="flex items-center text-muted-foreground">
-                            <DollarSign className="h-4 w-4 text-primary/70 mr-2" />
-                            <span>Budget: ${task.budget}</span>
-                          </div>
-                          <div className="flex items-center text-muted-foreground">
-                            <Calendar className="h-4 w-4 text-primary/70 mr-2" />
-                            <span>Deadline: {task.deadline}</span>
-                          </div>
+                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                        <div className="flex items-center text-muted-foreground">
+                          <DollarSign className="h-4 w-4 text-primary/70 mr-2" />
+                          <span>${task.budget}</span>
                         </div>
+                        <div className="flex items-center text-muted-foreground">
+                          <Calendar className="h-4 w-4 text-primary/70 mr-2" />
+                          <span>{task.deadline}</span>
+                        </div>
+                        <div className="flex items-center text-muted-foreground">
+                          <BookOpen className="h-4 w-4 text-primary/70 mr-2" />
+                          <span>{task.location}</span>
+                        </div>
+                      </div>
                       </CardContent>
                       <CardFooter className="pt-4 flex gap-3">
                         <Button variant="outline" className="flex-1" asChild>

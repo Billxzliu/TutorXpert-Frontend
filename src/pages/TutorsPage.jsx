@@ -10,6 +10,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Search, Filter, Star, Clock, BookOpen, Award, Zap, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import mockTutors from "@/data/mockTutors";
+
 
 const TutorsPage = () => {
   const { toast } = useToast();
@@ -20,14 +22,16 @@ const TutorsPage = () => {
   const [ratingFilter, setRatingFilter] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  const mockTutors = [
-    { id: 1, name: "Dr. Anya Sharma", title: "Quantum Physics & AI Specialist", subjects: ["Quantum Computing", "Machine Learning", "AI Ethics"], rating: 4.9, hourlyRate: 75, experience: "12+ years", bio: "Pioneering researcher in quantum AI, dedicated to making complex theories accessible. MIT Ph.D.", image: "Female scientist with futuristic interface" },
-    { id: 2, name: "Prof. Kenji Tanaka", title: "Cybersecurity & Blockchain Architect", subjects: ["Network Security", "Cryptography", "DeFi"], rating: 4.8, hourlyRate: 80, experience: "10 years", bio: "Ex-Silicon Valley security lead, now demystifying digital defense and decentralized systems. Stanford M.S.", image: "Male coder with multiple monitors and glowing code" },
-    { id: 3, name: "Dr. Lena Petrova", title: "Bio-Engineering & Genomics Expert", subjects: ["Genetic Engineering", "Bioinformatics", "Synthetic Biology"], rating: 4.9, hourlyRate: 70, experience: "15 years", bio: "Award-winning geneticist passionate about the future of medicine and personalized treatments. Harvard Ph.D.", image: "Female researcher in a high-tech lab with DNA helix visuals" },
-    { id: 4, name: "Jax R.", title: "AR/VR Development Pro", subjects: ["Unity", "Unreal Engine", "Spatial Computing"], rating: 4.7, hourlyRate: 65, experience: "6 years", bio: "Lead developer for immersive experiences, eager to share cutting-edge AR/VR skills. Indie Game Developer.", image: "Young male student with VR headset" },
-    { id: 5, name: "Dr. Eva Rostova", title: "Astrophysics & Cosmology Guide", subjects: ["General Relativity", "Dark Matter", "Exoplanets"], rating: 4.9, hourlyRate: 85, experience: "18 years", bio: "Published astrophysicist making the cosmos understandable, from black holes to distant galaxies. Caltech Ph.D.", image: "Professional woman in a futuristic setting" },
-    { id: 6, name: "Prof. Sam Carter", title: "Robotics & Automation Engineer", subjects: ["Mechatronics", "Control Systems", "AI in Robotics"], rating: 4.8, hourlyRate: 70, experience: "9 years", bio: "Robotics competition winner and university lecturer, focused on hands-on learning and practical application. Carnegie Mellon M.S.", image: "Engineer working with a robotic arm in a high-tech workshop" }
-  ];
+//  useEffect(() => {
+//   const timer = setTimeout(() => {
+//     setTutors(mockTutors);
+//     setFilteredTutors(mockTutors);
+//     setIsLoading(false);
+//   }, 1000);
+//   return () => clearTimeout(timer);
+// }, []);
+
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
