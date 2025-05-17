@@ -10,6 +10,7 @@ const mockTutors = [
     hourlyRate: 70,
     experience: "15 years",
     bio: "Award-winning geneticist passionate about the future of medicine and personalized treatments. Harvard Ph.D.",
+    location: "Sydney, Australia",
     image: "Female researcher in a high-tech lab with DNA helix visuals"
   },
   {
@@ -21,6 +22,7 @@ const mockTutors = [
     hourlyRate: 60,
     experience: "10 years",
     bio: "Specialist in chemical kinetics and molecular design. Published multiple papers in ACS journals.",
+    location: "Melbourne, Australia",
     image: "Scientist working in a lab with colorful flasks"
   },
   {
@@ -32,6 +34,7 @@ const mockTutors = [
     hourlyRate: 80,
     experience: "10 years",
     bio: "Ex-Silicon Valley security lead, now demystifying digital defense and decentralized systems. Stanford M.S.",
+    location: "Brisbane, Australia",
     image: "Male coder with multiple monitors and glowing code"
   },
   {
@@ -43,6 +46,7 @@ const mockTutors = [
     hourlyRate: 65,
     experience: "12 years",
     bio: "Economist and trader helping students decode complex economic models and market behavior.",
+    location: "Adelaide, Australia",
     image: "Businesswoman analyzing stock data on screen"
   },
   {
@@ -54,6 +58,7 @@ const mockTutors = [
     hourlyRate: 70,
     experience: "9 years",
     bio: "Robotics competition winner and university lecturer, focused on hands-on learning and practical application.",
+    location: "Canberra, Australia",
     image: "Engineer working with a robotic arm in a high-tech workshop"
   },
   {
@@ -65,6 +70,7 @@ const mockTutors = [
     hourlyRate: 55,
     experience: "11 years",
     bio: "Lover of words and structure, Emma helps students elevate academic and creative writing to excellence.",
+    location: "Sydney, Australia",
     image: "Literature professor with books and coffee"
   },
   {
@@ -76,6 +82,7 @@ const mockTutors = [
     hourlyRate: 50,
     experience: "13 years",
     bio: "Historian with a passion for storytelling and critical analysis of the past. Ph.D. from Oxford.",
+    location: "Perth, Australia",
     image: "Teacher in front of a historical map"
   },
   {
@@ -87,6 +94,7 @@ const mockTutors = [
     hourlyRate: 75,
     experience: "8 years",
     bio: "Former IMO medalist helping students master competition-level problem solving and logic.",
+    location: "Gold Coast, Australia",
     image: "Young teacher writing complex math on board"
   },
   {
@@ -98,6 +106,7 @@ const mockTutors = [
     hourlyRate: 85,
     experience: "18 years",
     bio: "Published astrophysicist making the cosmos understandable, from black holes to distant galaxies.",
+    location: "Melbourne, Australia",
     image: "Professional woman in a futuristic setting"
   },
   {
@@ -109,6 +118,7 @@ const mockTutors = [
     hourlyRate: 65,
     experience: "10 years",
     bio: "Helping students understand the human mind and behavior through applied psychological theory.",
+    location: "Darwin, Australia",
     image: "Counselor working with children"
   },
   {
@@ -120,6 +130,7 @@ const mockTutors = [
     hourlyRate: 60,
     experience: "7 years",
     bio: "Passionate about developing students' critical thinking and argumentation skills. Ethics and civics expert.",
+    location: "Hobart, Australia",
     image: "Man leading a discussion in a seminar room"
   }
 ];

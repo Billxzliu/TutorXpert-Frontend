@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,17 @@ import { Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import mockTasks from "@/data/mockTasks";
 
+const cityCoordinates = {
+  "Sydney, Australia": { top: "53.5%", left: "76.5%" },
+  "Melbourne, Australia": { top: "72.2%", left: "77.5%" },
+  "Brisbane, Australia": { top: "44%", left: "75.5%" },
+  "Adelaide, Australia": { top: "65.2%", left: "64.2%" },
+  "Canberra, Australia": { top: "61.5%", left: "73.4%" },
+  "Perth, Australia": { top: "66.1%", left: "30.5%" },
+  "Darwin, Australia": { top: "24.5%", left: "50.8%" },
+  "Hobart, Australia": { top: "86.2%", left: "80.3%" },
+  "Gold Coast, Australia": { top: "49.2%", left: "77.2%" }
+};
 
 const TasksPage = () => {
   const { toast } = useToast();
@@ -20,6 +31,7 @@ const TasksPage = () => {
   const [subjectFilter, setSubjectFilter] = useState("");
   const [budgetFilter, setBudgetFilter] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const taskRefs = useRef({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -63,10 +75,15 @@ const TasksPage = () => {
   const handleApplyToTask = (taskTitle) => {
     toast({
       title: "Application Submitted",
-      description: `You have expressed interest in \"${taskTitle}\". The task poster will be notified.`,
+      description: `You have expressed interest in "${taskTitle}". The task poster will be notified.`,
       duration: 5000,
       className: "bg-card border-primary/50 text-foreground",
     });
+  };
+
+  const scrollToCard = (taskId) => {
+    const target = taskRefs.current[taskId];
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
   const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } };
@@ -128,92 +145,71 @@ const TasksPage = () => {
           </div>
         </motion.div>
 
-        {isLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary tech-glow"></div>
-          </div>
-        ) : (
-          <>
-            <div className="flex justify-between items-center mb-8">
-              <p className="text-muted-foreground">
-                Showing {filteredTasks.length} of {tasks.length} tasks
-              </p>
-              <div className="flex items-center">
-                <Filter className="h-5 w-5 mr-2 text-primary/70" />
-                <span className="text-sm text-muted-foreground">Sort by: </span>
-                <Select defaultValue="newest">
-                  <SelectTrigger className="ml-2 text-sm bg-transparent border-none focus:ring-0 h-auto p-1 text-muted-foreground hover:text-foreground">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-card border-primary/50">
-                    <SelectItem value="newest">Newest First</SelectItem>
-                    <SelectItem value="budget_hl">Budget: High to Low</SelectItem>
-                    <SelectItem value="deadline">Deadline: Soonest</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {filteredTasks.length === 0 ? (
-              <motion.div variants={fadeIn} className="text-center py-20 glass-effect rounded-xl shadow-2xl">
-                <BookOpen className="h-16 w-16 mx-auto text-primary/50 mb-6" />
-                <h3 className="text-2xl font-semibold mb-3 text-primary">No Tasks Found</h3>
-                <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-                  Try adjusting filters or check back later for new student tasks.
-                </p>
-                <Button onClick={() => { setSearchTerm(""); setSubjectFilter(""); setBudgetFilter(""); }}>
-                  Reset Filters
-                </Button>
-              </motion.div>
-            ) : (
-              <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {filteredTasks.map((task) => (
-                  <motion.div key={task.id} variants={fadeIn}>
-                    <Card className="h-full flex flex-col card-hover glass-effect">
-                      <CardHeader>
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <CardTitle className="text-xl text-primary">{task.title}</CardTitle>
-                            <p className="text-xs text-muted-foreground mt-1">
-                              Posted by {task.postedBy} • {task.postedDate}
-                            </p>
-                          </div>
-                          <Badge variant={task.status === "Open" ? "success" : "secondary"}>{task.status}</Badge>
-                        </div>
-                        <Badge variant="outline" className="mt-2 inline-block">{task.subject}</Badge>
-                      </CardHeader>
-                      <CardContent className="py-2 flex-grow">
-                        <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{task.description}</p>
-                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-                        <div className="flex items-center text-muted-foreground">
-                          <DollarSign className="h-4 w-4 text-primary/70 mr-2" />
-                          <span>${task.budget}</span>
-                        </div>
-                        <div className="flex items-center text-muted-foreground">
-                          <Calendar className="h-4 w-4 text-primary/70 mr-2" />
-                          <span>{task.deadline}</span>
-                        </div>
-                        <div className="flex items-center text-muted-foreground">
-                          <BookOpen className="h-4 w-4 text-primary/70 mr-2" />
-                          <span>{task.location}</span>
-                        </div>
+        <div className="flex flex-col md:flex-row gap-6 h-[700px]">
+          <motion.div variants={staggerContainer} className="w-full md:w-[400px] overflow-y-auto space-y-6 pr-2">
+            {filteredTasks.map(task => (
+              <motion.div key={task.id} variants={fadeIn} ref={el => taskRefs.current[task.id] = el}>
+                <Card className="h-full flex flex-col card-hover glass-effect">
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <CardTitle className="text-xl text-primary">{task.title}</CardTitle>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Posted by {task.postedBy} • {task.postedDate}
+                        </p>
                       </div>
-                      </CardContent>
-                      <CardFooter className="pt-4 flex gap-3">
-                        <Button variant="outline" className="flex-1" asChild>
-                          <Link to={`/projects/${task.id}`}>View Details</Link>
-                        </Button>
-                        <Button className="flex-1" onClick={() => handleApplyToTask(task.title)}>
-                          Apply Now <Zap className="ml-2 h-4 w-4" />
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  </motion.div>
-                ))}
+                      <Badge variant={task.status === "Open" ? "success" : "secondary"}>{task.status}</Badge>
+                    </div>
+                    <Badge variant="outline" className="mt-2 inline-block">{task.subject}</Badge>
+                  </CardHeader>
+                  <CardContent className="py-2 flex-grow">
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{task.description}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                      <div className="flex items-center text-muted-foreground">
+                        <DollarSign className="h-4 w-4 text-primary/70 mr-2" />
+                        <span>${task.budget}</span>
+                      </div>
+                      <div className="flex items-center text-muted-foreground">
+                        <Calendar className="h-4 w-4 text-primary/70 mr-2" />
+                        <span>{task.deadline}</span>
+                      </div>
+                      <div className="flex items-center text-muted-foreground">
+                        <BookOpen className="h-4 w-4 text-primary/70 mr-2" />
+                        <span>{task.location}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="pt-4 flex gap-3">
+                    <Button variant="outline" className="flex-1" asChild>
+                      <Link to={`/projects/${task.id}`}>View Details</Link>
+                    </Button>
+                    <Button className="flex-1" onClick={() => handleApplyToTask(task.title)}>
+                      Apply Now <Zap className="ml-2 h-4 w-4" />
+                    </Button>
+                  </CardFooter>
+                </Card>
               </motion.div>
-            )}
-          </>
-        )}
+            ))}
+          </motion.div>
+
+          <div className="relative flex-1 rounded-xl overflow-hidden">
+            <img src="/map.png" alt="Australia Map" className="w-full h-full object-contain" />
+            {filteredTasks.map(task => {
+              const coords = cityCoordinates[task.location];
+              if (!coords) return null;
+              return (
+                <div
+                  key={task.id}
+                  onClick={() => scrollToCard(task.id)}
+                  className="absolute bg-primary text-background text-xs px-3 py-1 rounded-full font-semibold shadow-md cursor-pointer hover:bg-secondary"
+                  style={{ top: coords.top, left: coords.left, transform: 'translate(-50%, -50%)', whiteSpace: 'nowrap' }}
+                >
+                  {task.subject}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

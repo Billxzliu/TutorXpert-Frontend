@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +10,19 @@ import { Search, Filter, Star, Clock, BookOpen, Award, Zap, ChevronDown } from "
 import { Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import mockTutors from "@/data/mockTutors";
+import mapBg from "/public/map.png";
 
+const cityCoordinates = {
+  "Sydney, Australia": { top: "55%", left: "75%" },
+  "Melbourne, Australia": { top: "70%", left: "77%" },
+  "Brisbane, Australia": { top: "45%", left: "75%" },
+  "Adelaide, Australia": { top: "65%", left: "65%" },
+  "Canberra, Australia": { top: "60%", left: "73%" },
+  "Perth, Australia": { top: "65%", left: "30%" },
+  "Darwin, Australia": { top: "25%", left: "50%" },
+  "Hobart, Australia": { top: "85%", left: "80%" },
+  "Gold Coast, Australia": { top: "50%", left: "77%" }
+};
 
 const TutorsPage = () => {
   const { toast } = useToast();
@@ -22,16 +33,7 @@ const TutorsPage = () => {
   const [ratingFilter, setRatingFilter] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-//  useEffect(() => {
-//   const timer = setTimeout(() => {
-//     setTutors(mockTutors);
-//     setFilteredTutors(mockTutors);
-//     setIsLoading(false);
-//   }, 1000);
-//   return () => clearTimeout(timer);
-// }, []);
-
-
+  const cardRefs = useRef({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -75,6 +77,15 @@ const TutorsPage = () => {
       duration: 5000,
       className: "bg-card border-primary/50 text-foreground",
     });
+  };
+
+  const handleMapClick = (id) => {
+    const element = cardRefs.current[id];
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      element.classList.add("ring", "ring-primary");
+      setTimeout(() => element.classList.remove("ring", "ring-primary"), 2000);
+    }
   };
 
   const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } };
@@ -130,98 +141,77 @@ const TutorsPage = () => {
           </div>
         </motion.div>
 
-        {isLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary tech-glow"></div>
-          </div>
-        ) : (
-          <>
-            <div className="flex justify-between items-center mb-8">
-              <p className="text-muted-foreground">
-                Displaying {filteredTutors.length} of {tutors.length} expert profiles
-              </p>
-              <div className="flex items-center">
-                <Filter className="h-5 w-5 mr-2 text-primary/70" />
-                <span className="text-sm text-muted-foreground">Sort by: </span>
-                <Select defaultValue="relevance">
-                  <SelectTrigger className="ml-2 text-sm bg-transparent border-none focus:ring-0 h-auto p-1 text-muted-foreground hover:text-foreground">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-card border-primary/50">
-                    <SelectItem value="relevance">Relevance</SelectItem>
-                    <SelectItem value="rating">Rating: High to Low</SelectItem>
-                    <SelectItem value="price_lh">Price: Low to High</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+        <div className="flex flex-col md:flex-row gap-6 h-[700px]">
+          <motion.div variants={staggerContainer} className="w-full md:w-[400px] overflow-y-auto space-y-6 pr-2">
+            {filteredTutors.map((tutor) => (
+              <motion.div key={tutor.id} variants={fadeIn} ref={el => cardRefs.current[tutor.id] = el}>
+                <Card className="h-full flex flex-col card-hover glass-effect">
+                  <CardHeader className="pb-2">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center mb-3">
+                        <div className="mr-4 relative">
+                          <img alt={`Tutor ${tutor.name}`} className="w-20 h-20 rounded-full object-cover border-2 border-primary tech-glow" src="https://images.unsplash.com/photo-1701229404076-5629809b331d" />
+                          <span className="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-green-500 border-2 border-card ring-1 ring-green-400"></span>
+                        </div>
+                        <div>
+                          <CardTitle className="text-xl text-primary">{tutor.name}</CardTitle>
+                          <p className="text-sm text-muted-foreground">{tutor.title}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center bg-primary/10 px-2 py-1 rounded-full">
+                        <Star className="h-4 w-4 text-yellow-400 mr-1" />
+                        <span className="text-sm font-medium text-yellow-400">{tutor.rating}</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {tutor.subjects.slice(0,3).map((s, i) => <Badge key={i} variant="secondary">{s}</Badge>)}
+                      {tutor.subjects.length > 3 && <Badge variant="outline">+{tutor.subjects.length - 3} more</Badge>}
+                    </div>
+                  </CardHeader>
+                  <CardContent className="py-2 flex-grow">
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{tutor.bio}</p>
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div className="flex items-center text-muted-foreground">
+                        <Clock className="h-4 w-4 text-primary/70 mr-2" />
+                        <span>${tutor.hourlyRate}/hour</span>
+                      </div>
+                      <div className="flex items-center text-muted-foreground">
+                        <Award className="h-4 w-4 text-primary/70 mr-2" />
+                        <span>{tutor.experience}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="pt-4 flex gap-3">
+                    <Button variant="outline" className="flex-1" asChild>
+                      <Link to={`/tutors/${tutor.id}`}>View Full Profile</Link>
+                    </Button>
+                    <Button className="flex-1" onClick={() => handleContactTutor(tutor.name)}>
+                      Connect <Zap className="ml-2 h-4 w-4" />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
 
-            {filteredTutors.length === 0 ? (
-              <motion.div variants={fadeIn} className="text-center py-20 glass-effect rounded-xl shadow-2xl">
-                <Zap className="h-16 w-16 mx-auto text-primary/50 mb-6" />
-                <h3 className="text-2xl font-semibold mb-3 text-primary">No Tutors Match Criteria</h3>
-                <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-                  Recalibrate your search parameters or explore our full roster of experts.
-                </p>
-                <Button onClick={() => { setSearchTerm(""); setSubjectFilter(""); setRatingFilter(""); }}>
-                  Reset Filters
-                </Button>
-              </motion.div>
-            ) : (
-              <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredTutors.map((tutor) => (
-                  <motion.div key={tutor.id} variants={fadeIn}>
-                    <Card className="h-full flex flex-col card-hover glass-effect">
-                      <CardHeader className="pb-2">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-center mb-3">
-                            <div className="mr-4 relative">
-                              <img  alt={`Tutor ${tutor.name}`} className="w-20 h-20 rounded-full object-cover border-2 border-primary tech-glow" src="https://images.unsplash.com/photo-1701229404076-5629809b331d" />
-                              <span className="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-green-500 border-2 border-card ring-1 ring-green-400"></span>
-                            </div>
-                            <div>
-                              <CardTitle className="text-xl text-primary">{tutor.name}</CardTitle>
-                              <p className="text-sm text-muted-foreground">{tutor.title}</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center bg-primary/10 px-2 py-1 rounded-full">
-                            <Star className="h-4 w-4 text-yellow-400 mr-1" />
-                            <span className="text-sm font-medium text-yellow-400">{tutor.rating}</span>
-                          </div>
-                        </div>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          {tutor.subjects.slice(0,3).map((s, i) => <Badge key={i} variant="secondary">{s}</Badge>)}
-                          {tutor.subjects.length > 3 && <Badge variant="outline">+{tutor.subjects.length - 3} more</Badge>}
-                        </div>
-                      </CardHeader>
-                      <CardContent className="py-2 flex-grow">
-                        <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{tutor.bio}</p>
-                        <div className="grid grid-cols-2 gap-3 text-sm">
-                          <div className="flex items-center text-muted-foreground">
-                            <Clock className="h-4 w-4 text-primary/70 mr-2" />
-                            <span>${tutor.hourlyRate}/hour</span>
-                          </div>
-                          <div className="flex items-center text-muted-foreground">
-                            <Award className="h-4 w-4 text-primary/70 mr-2" />
-                            <span>{tutor.experience}</span>
-                          </div>
-                        </div>
-                      </CardContent>
-                      <CardFooter className="pt-4 flex gap-3">
-                        <Button variant="outline" className="flex-1" asChild>
-                          <Link to={`/tutors/${tutor.id}`}>View Full Profile</Link>
-                        </Button>
-                        <Button className="flex-1" onClick={() => handleContactTutor(tutor.name)}>
-                          Connect <Zap className="ml-2 h-4 w-4" />
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
-          </>
-        )}
+          <div className="relative flex-1 rounded-xl overflow-hidden shadow-2xl">
+            <img src="/map.png" alt="Australia Map" className="w-full h-full object-cover" />
+            {filteredTutors.map(tutor => {
+              const coords = cityCoordinates[tutor.location];
+              if (!coords) return null;
+              return (
+                <div
+                  key={tutor.id}
+                  className="absolute text-xs text-white bg-primary px-2 py-1 rounded-full shadow-lg transform -translate-x-1/2 -translate-y-1/2 cursor-pointer hover:scale-110 hover:ring-2 hover:ring-secondary"
+                  style={{ top: coords.top, left: coords.left }}
+                  onClick={() => handleMapClick(tutor.id)}
+                >
+                  {tutor.subjects[0]}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );
