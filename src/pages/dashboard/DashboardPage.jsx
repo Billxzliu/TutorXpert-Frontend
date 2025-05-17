@@ -22,13 +22,13 @@ const DashboardPage = () => {
 
   const studentQuickLinks = [
     { name: "Find a Tutor", path: "/tutors", icon: Search, color: "text-blue-400" },
-    { name: "Post New Project", path: "/projects/new", icon: PlusCircle, color: "text-green-400" },
+    { name: "Post New Task", path: "/projects/new", icon: PlusCircle, color: "text-green-400" },
     { name: "My Appointments", path: "/dashboard/appointments", icon: CalendarDays, color: "text-purple-400" },
     { name: "My Messages", path: "/dashboard/messages", icon: Send, color: "text-pink-400" },
   ];
 
   const tutorQuickLinks = [
-    { name: "Browse Projects", path: "/projects", icon: Search, color: "text-blue-400" },
+    { name: "Browse Tasks", path: "/projects", icon: Search, color: "text-blue-400" },
     { name: "My Listings", path: "/dashboard/listings", icon: List, color: "text-green-400" },
     { name: "My Bids", path: "/dashboard/bids", icon: Briefcase, color: "text-purple-400" },
     { name: "My Schedule", path: "/dashboard/appointments", icon: CalendarDays, color: "text-orange-400" },
@@ -42,7 +42,7 @@ const DashboardPage = () => {
     { label: "Upcoming Sessions", value: user.upcomingSessions || 3, icon: CalendarDays },
     { label: "Total Earnings", value: `$${user.totalEarnings || 1250}`, icon: CreditCard },
   ] : [
-    { label: "Active Projects", value: user.activeProjects || 2, icon: PlusCircle },
+    { label: "Active Tasks", value: user.activeTasks || 2, icon: PlusCircle },
     { label: "Favorited Tutors", value: user.favoritedTutors || 8, icon: Star },
     { label: "Upcoming Appointments", value: user.upcomingAppointments || 4, icon: CalendarDays },
     { label: "Unread Messages", value: user.unreadMessages || 3, icon: Send },
@@ -53,7 +53,7 @@ const DashboardPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-background to-card/30 text-foreground py-8 px-4 md:px-8">
       <motion.div initial="hidden" animate="visible" variants={fadeIn} className="mb-10">
         <h1 className="text-4xl md:text-5xl font-bold animated-gradient-text mb-2">Welcome Back, {user.firstName}!</h1>
-        <p className="text-lg text-muted-foreground">Here's your personalized command center for TutorXpert.</p>
+        <p className="text-lg text-muted-foreground">Here's your personalized command center for GlowUpTutors.</p>
       </motion.div>
 
       {/* Overview Stats */}

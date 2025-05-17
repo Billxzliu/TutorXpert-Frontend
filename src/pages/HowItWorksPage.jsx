@@ -37,7 +37,7 @@ const HowItWorksPage = () => {
             variants={fadeIn}
             className="text-center max-w-3xl mx-auto"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">How TutorXpert Works</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">How GlowUpTutors Works</h1>
             <p className="text-lg md:text-xl mb-8 opacity-90">
               Our platform connects students with expert tutors through a simple, effective process designed to ensure academic success.
             </p>
@@ -63,7 +63,7 @@ const HowItWorksPage = () => {
             variants={fadeIn}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">The TutorXpert Process</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">The GlowUpTutors Process</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Our streamlined process makes it easy to find the perfect tutor and get the help you need.
             </p>
@@ -79,7 +79,7 @@ const HowItWorksPage = () => {
             {[
               {
                 icon: <BookOpen className="text-primary h-10 w-10" />,
-                title: "1. Post Your Project",
+                title: "1. Post Your Task",
                 description: "Describe your academic needs, set your budget, and specify your timeline to get started.",
                 details: [
                   "Create a detailed project description",
@@ -149,7 +149,7 @@ const HowItWorksPage = () => {
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">For Students</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              TutorXpert helps you find the perfect tutor to achieve your academic goals.
+              GlowUpTutors helps you find the perfect tutor to achieve your academic goals.
             </p>
           </motion.div>
 
@@ -205,7 +205,7 @@ const HowItWorksPage = () => {
               ))}
               <motion.div variants={fadeIn} className="pt-4">
                 <Button asChild size="lg">
-                  <Link to="/projects/new">Post Your Project</Link>
+                  <Link to="/projects/new">Post Your Task</Link>
                 </Button>
               </motion.div>
             </motion.div>
@@ -302,7 +302,7 @@ const HowItWorksPage = () => {
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Find answers to common questions about using TutorXpert.
+              Find answers to common questions about using GlowUpTutors.
             </p>
           </motion.div>
 
@@ -331,7 +331,7 @@ const HowItWorksPage = () => {
                 answer: "If you're not satisfied with your tutor, you can provide feedback and request a different tutor. We're committed to ensuring you have a positive learning experience."
               },
               {
-                question: "How do I become a tutor on TutorXpert?",
+                question: "How do I become a tutor on GlowUpTutors?",
                 answer: "To become a tutor, sign up for an account, complete your profile with your qualifications and expertise, pass our verification process, and start applying to student projects."
               },
               {
@@ -364,14 +364,14 @@ const HowItWorksPage = () => {
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
             <p className="text-xl mb-8 opacity-90 max-w-3xl mx-auto">
-              Join TutorXpert today and take the first step toward academic success.
+              Join GlowUpTutors today and take the first step toward academic success.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild className="bg-white text-primary hover:bg-gray-100">
                 <Link to="/signup">Create an Account</Link>
               </Button>
               <Button size="lg" variant="outline" asChild className="border-white text-white hover:bg-white/10">
-                <Link to="/projects">Browse Projects</Link>
+                <Link to="/projects">Browse Tasks</Link>
               </Button>
             </div>
           </motion.div>

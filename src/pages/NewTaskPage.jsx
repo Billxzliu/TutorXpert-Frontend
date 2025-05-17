@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 
-const NewProjectPage = () => {
+const NewTaskPage = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -54,7 +54,7 @@ const NewProjectPage = () => {
 
     setTimeout(() => {
       const projects = JSON.parse(localStorage.getItem("projects") || "[]");
-      const newProject = {
+      const newTask = {
         id: Date.now(),
         ...formData,
         postedBy: "You",
@@ -63,7 +63,7 @@ const NewProjectPage = () => {
         attachments: formData.attachments.map(file => file.name)
       };
 
-      projects.push(newProject);
+      projects.push(newTask);
       localStorage.setItem("projects", JSON.stringify(projects));
 
       toast({
@@ -90,7 +90,7 @@ const NewProjectPage = () => {
           variants={fadeIn}
           className="text-center mb-8"
         >
-          <h1 className="text-3xl font-bold animated-gradient-text mb-4">Post a New Project</h1>
+          <h1 className="text-3xl font-bold animated-gradient-text mb-4">Post a New Task</h1>
           <p className="text-lg text-muted-foreground">
             Share the details of your academic project to find the perfect tutor.
           </p>
@@ -104,14 +104,14 @@ const NewProjectPage = () => {
           <Card className="bg-card/80 backdrop-blur-xl">
             <form onSubmit={handleSubmit}>
               <CardHeader>
-                <CardTitle className="animated-gradient-text">Project Details</CardTitle>
+                <CardTitle className="animated-gradient-text">Task Details</CardTitle>
                 <CardDescription className="text-muted-foreground">
                   Provide clear and detailed information to attract the right tutors.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="title">Project Title *</Label>
+                  <Label htmlFor="title">Task Title *</Label>
                   <Input id="title" name="title" placeholder="E.g., Calculus Problem Set Help" value={formData.title} onChange={handleChange} required />
                 </div>
 
@@ -137,7 +137,7 @@ const NewProjectPage = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="description">Project Description *</Label>
+                  <Label htmlFor="description">Task Description *</Label>
                   <Textarea id="description" name="description" placeholder="Describe your project in detail..." rows={5} value={formData.description} onChange={handleChange} required />
                 </div>
 
@@ -196,7 +196,7 @@ const NewProjectPage = () => {
                       Posting...
                     </div>
                   ) : (
-                    "Post Project"
+                    "Post Task"
                   )}
                 </Button>
               </CardFooter>
@@ -208,4 +208,4 @@ const NewProjectPage = () => {
   );
 };
 
-export default NewProjectPage;
+export default NewTaskPage;

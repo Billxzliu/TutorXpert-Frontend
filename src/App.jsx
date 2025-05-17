@@ -7,9 +7,9 @@ import Footer from "@/components/Footer";
 import HomePage from "@/pages/HomePage";
 import TutorsPage from "@/pages/TutorsPage";
 import TutorProfilePage from "@/pages/TutorProfilePage";
-import ProjectsPage from "@/pages/ProjectsPage";
-import ProjectDetailsPage from "@/pages/ProjectDetailsPage";
-import NewProjectPage from "@/pages/NewProjectPage";
+import TasksPage from "@/pages/TasksPage";
+import TaskDetailsPage from "@/pages/TaskDetailsPage";
+import NewTaskPage from "@/pages/NewTaskPage";
 import HowItWorksPage from "@/pages/HowItWorksPage";
 import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
@@ -38,8 +38,8 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/tutors" element={<TutorsPage />} />
             <Route path="/tutors/:id" element={<TutorProfilePage />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/projects/:id" element={<ProjectDetailsPage />} />
+            <Route path="/projects" element={<TasksPage />} />
+            <Route path="/projects/:id" element={<TaskDetailsPage />} />
             <Route path="/how-it-works" element={<HowItWorksPage />} />
             <Route path="/about" element={<AboutUsPage />} />
             <Route path="/contact" element={<ContactPage />} />
@@ -56,7 +56,7 @@ const App = () => {
               <Route path="/dashboard/bids" element={<MyBidsPage />} />
               <Route path="/dashboard/listings" element={<MyListingsPage />} />
               <Route path="/dashboard/appointments" element={<MyAppointmentsPage />} />
-              <Route path="/projects/new" element={<NewProjectPage />} />
+              <Route path="/projects/new" element={<NewTaskPage />} />
               {/* <Route path="/pay/:appointmentId" element={<PayPage />} /> */}
             </Route>
             

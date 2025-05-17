@@ -145,7 +145,7 @@ const PricingPage = () => {
           variants={fadeIn}
           className="mt-24 text-center"
         >
-          <h2 className="text-3xl font-bold text-primary mb-8">Why Choose TutorXpert?</h2>
+          <h2 className="text-3xl font-bold text-primary mb-8">Why Choose GlowUpTutors?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { icon: Star, title: "Quality Tutors", description: "Access a network of verified and highly-rated experts in diverse fields." },

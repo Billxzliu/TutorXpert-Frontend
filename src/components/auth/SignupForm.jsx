@@ -96,7 +96,7 @@ const SignupForm = () => {
       userToSave.isLoggedIn = true;
       localStorage.setItem("user", JSON.stringify(userToSave));
       
-      toast({ title: "Account Synced!", description: "You are now part of the TutorXpert network.", className: "bg-card border-primary/50 text-foreground" });
+      toast({ title: "Account Synced!", description: "You are now part of the GlowUpTutors network.", className: "bg-card border-primary/50 text-foreground" });
       setIsSubmitting(false);
       navigate("/");
     }, 1500);

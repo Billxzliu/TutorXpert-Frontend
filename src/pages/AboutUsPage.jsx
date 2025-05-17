@@ -25,26 +25,26 @@ const AboutUsPage = () => {
 
   const teamMembers = [
     { name: "Dr. Alex Chen", role: "Founder & CEO", image: "Visionary leader with a tech background", bio: "Passionate about revolutionizing education through technology, Dr. Chen brings over 15 years of experience in AI and e-learning platforms." },
-    { name: "Maria Rodriguez", role: "Head of Operations", image: "Experienced operations manager in a modern office", bio: "Maria ensures the seamless functioning of TutorXpert, focusing on user experience and platform efficiency. Her expertise lies in scaling tech startups." },
-    { name: "Sam Lee", role: "Lead Developer", image: "Focused software developer coding on a laptop", bio: "Sam leads our talented development team, building the robust and intuitive features that power TutorXpert. He's an advocate for agile methodologies." },
+    { name: "Maria Rodriguez", role: "Head of Operations", image: "Experienced operations manager in a modern office", bio: "Maria ensures the seamless functioning of GlowUpTutors, focusing on user experience and platform efficiency. Her expertise lies in scaling tech startups." },
+    { name: "Sam Lee", role: "Lead Developer", image: "Focused software developer coding on a laptop", bio: "Sam leads our talented development team, building the robust and intuitive features that power GlowUpTutors. He's an advocate for agile methodologies." },
   ];
 
   const faqItems = [
     {
-      question: "What is TutorXpert's mission?",
+      question: "What is GlowUpTutors's mission?",
       answer: "Our mission is to bridge the gap between students seeking knowledge and experts willing to share it, fostering a global community of learning and growth through an accessible, technologically advanced platform.",
     },
     {
-      question: "How does TutorXpert ensure tutor quality?",
+      question: "How does GlowUpTutors ensure tutor quality?",
       answer: "We have a rigorous vetting process for all tutors, including verification of credentials, subject matter expertise assessments, and background checks (where applicable). We also utilize a rating and review system to maintain high standards.",
     },
     {
-      question: "What subjects are covered on TutorXpert?",
-      answer: "TutorXpert covers a vast range of subjects, from core academic disciplines like Math, Science, and Languages, to specialized fields in technology, arts, and professional development. Our network is constantly expanding.",
+      question: "What subjects are covered on GlowUpTutors?",
+      answer: "GlowUpTutors covers a vast range of subjects, from core academic disciplines like Math, Science, and Languages, to specialized fields in technology, arts, and professional development. Our network is constantly expanding.",
     },
     {
       question: "How can I know more about Xpert?",
-      answer: "You can learn more about TutorXpert by exploring our 'How It Works' page, checking our blog for updates and insights, following us on social media, or contacting our support team directly. We're always happy to share more about our platform and vision!",
+      answer: "You can learn more about GlowUpTutors by exploring our 'How It Works' page, checking our blog for updates and insights, following us on social media, or contacting our support team directly. We're always happy to share more about our platform and vision!",
     },
   ];
 
@@ -68,7 +68,7 @@ const AboutUsPage = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <Zap className="h-16 w-16 text-primary mx-auto mb-6 tech-glow" />
           <h1 className="text-4xl md:text-6xl font-extrabold mb-6 animated-gradient-text">
-            About TutorXpert
+            About GlowUpTutors
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
             We are dedicated to revolutionizing the learning experience by connecting students with expert tutors through an innovative, accessible, and technologically advanced platform.
@@ -91,14 +91,14 @@ const AboutUsPage = () => {
           <motion.div variants={fadeIn} className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Our Journey</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Founded on the principle that education should be limitless, TutorXpert was born from a desire to make expert knowledge accessible to everyone, everywhere. We believe in the power of personalized learning to unlock potential and drive innovation.
+              Founded on the principle that education should be limitless, GlowUpTutors was born from a desire to make expert knowledge accessible to everyone, everywhere. We believe in the power of personalized learning to unlock potential and drive innovation.
             </p>
           </motion.div>
           <motion.div variants={fadeIn} className="grid md:grid-cols-2 gap-10 items-center">
             <div className="space-y-6">
               <h3 className="text-2xl font-semibold text-secondary">The Spark of Innovation</h3>
               <p className="text-muted-foreground">
-                Recognizing the challenges students face in finding specialized help and tutors struggle to reach a wider audience, TutorXpert was conceived as a dynamic bridge. Our platform leverages cutting-edge technology to create perfect matches, fostering meaningful educational connections.
+                Recognizing the challenges students face in finding specialized help and tutors struggle to reach a wider audience, GlowUpTutors was conceived as a dynamic bridge. Our platform leverages cutting-edge technology to create perfect matches, fostering meaningful educational connections.
               </p>
               <h3 className="text-2xl font-semibold text-secondary">Building the Future of Learning</h3>
               <p className="text-muted-foreground">
@@ -194,7 +194,7 @@ const AboutUsPage = () => {
           >
             <h2 className="text-3xl font-bold text-primary mb-8">Connect With Us</h2>
             <p className="text-muted-foreground mb-6">
-              Stay updated with the latest news, insights, and community stories from TutorXpert. Follow us on your favorite platforms!
+              Stay updated with the latest news, insights, and community stories from GlowUpTutors. Follow us on your favorite platforms!
             </p>
             <div className="space-y-4">
               {[

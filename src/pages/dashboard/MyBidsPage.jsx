@@ -53,7 +53,7 @@ const MyBidsPage = () => {
           </p>
           <Button asChild size="lg">
             <Link to="/projects" className="flex items-center">
-              <Search className="mr-2 h-5 w-5" /> Browse Projects
+              <Search className="mr-2 h-5 w-5" /> Browse Tasks
             </Link>
           </Button>
         </motion.div>
@@ -88,7 +88,7 @@ const MyBidsPage = () => {
               </CardContent>
               <CardFooter className="gap-2 flex-wrap justify-start sm:justify-end border-t border-primary/20 pt-4">
                 <Button variant="outline" size="sm" asChild>
-                  <Link to={`/projects/${bid.id}`}> <ExternalLink className="mr-2 h-4 w-4"/> View Project</Link>
+                  <Link to={`/projects/${bid.id}`}> <ExternalLink className="mr-2 h-4 w-4"/> View Task</Link>
                 </Button>
                 <Button variant="outline" size="sm">
                   <MessageSquare className="mr-2 h-4 w-4"/> Message Student

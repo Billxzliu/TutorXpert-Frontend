@@ -83,7 +83,7 @@ const LoginPage = () => {
           <h1 className="text-3xl font-bold animated-gradient-text">
             Welcome Back
           </h1>
-          <p className="mt-2 text-muted-foreground">Log in to your TutorXpert account</p>
+          <p className="mt-2 text-muted-foreground">Log in to your GlowUpTutors account</p>
         </div>
 
         <Card className="shadow-xl bg-card/80 backdrop-blur-xl">

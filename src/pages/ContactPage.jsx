@@ -14,7 +14,7 @@ const ContactPage = () => {
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [chatMessages, setChatMessages] = useState([
-    { sender: "bot", text: "Hello! I'm TutorXpert Support Bot. How can I assist you today?" }
+    { sender: "bot", text: "Hello! I'm GlowUpTutors Support Bot. How can I assist you today?" }
   ]);
   const [chatInput, setChatInput] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);

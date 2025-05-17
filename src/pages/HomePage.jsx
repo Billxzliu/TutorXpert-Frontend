@@ -61,7 +61,7 @@ const HomePage = () => {
                 Connect with Expert Tutors.
               </h1>
               <p className="text-lg md:text-xl mb-10 text-muted-foreground">
-                TutorXpert is your gateway to academic excellence. Post projects, find elite tutors, and master any subject with our cutting-edge personalized learning platform.
+                GlowUpTutors is your gateway to academic excellence. Post projects, find elite tutors, and master any subject with our cutting-edge personalized learning platform.
               </p>
               <motion.div 
                 className="flex flex-col sm:flex-row gap-4"
@@ -69,7 +69,7 @@ const HomePage = () => {
               >
                 <motion.div variants={fadeIn}>
                   <Button size="lg" asChild>
-                    <Link to="/projects/new">Post a Project <ArrowRight className="ml-2 h-5 w-5" /></Link>
+                    <Link to="/projects/new">Post a Task <ArrowRight className="ml-2 h-5 w-5" /></Link>
                   </Button>
                 </motion.div>
                 <motion.div variants={fadeIn}>
@@ -103,7 +103,7 @@ const HomePage = () => {
             variants={fadeIn}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-primary">How TutorXpert Works</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-primary">How GlowUpTutors Works</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               Our intelligent platform seamlessly connects students with qualified tutors in three streamlined steps.
             </p>
@@ -233,7 +233,7 @@ const HomePage = () => {
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-primary">Success Stories</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Hear from users who have transformed their learning with TutorXpert.
+              Hear from users who have transformed their learning with GlowUpTutors.
             </p>
           </motion.div>
 
@@ -245,7 +245,7 @@ const HomePage = () => {
             className="grid grid-cols-1 md:grid-cols-2 gap-8"
           >
             {[
-              { name: "Jax R.", role: "AI Engineering Student", image: "Young male student with VR headset", quote: "TutorXpert's AI matching found me a specialist in neural networks. My project went from concept to reality in weeks!" },
+              { name: "Jax R.", role: "AI Engineering Student", image: "Young male student with VR headset", quote: "GlowUpTutors's AI matching found me a specialist in neural networks. My project went from concept to reality in weeks!" },
               { name: "Dr. Eva Rostova", role: "Quantum Mechanics Tutor", image: "Professional woman in a futuristic setting", quote: "The platform's tools and global reach allow me to share my passion for quantum physics with eager minds worldwide. It's revolutionary." }
             ].map((testimonial, index) => (
               <motion.div key={index} variants={fadeIn} className="glass-effect p-8 rounded-xl card-hover">
@@ -280,7 +280,7 @@ const HomePage = () => {
             <Zap className="h-16 w-16 text-primary-foreground mx-auto mb-6 tech-glow opacity-80" />
             <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Elevate Your Learning?</h2>
             <p className="text-xl mb-10 opacity-90 max-w-3xl mx-auto">
-              Join the TutorXpert revolution. Sign up today and experience the future of personalized education.
+              Join the GlowUpTutors revolution. Sign up today and experience the future of personalized education.
             </p>
             <motion.div 
               className="flex flex-col sm:flex-row gap-4 justify-center"

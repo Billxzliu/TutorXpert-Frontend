@@ -16,7 +16,7 @@ const MyAppointmentsPage = () => {
   // Mock data - replace with actual data fetching
   const appointments = [
     { id: 1, type: "student", tutorName: "Dr. Anya Sharma", subject: "Quantum Physics", date: "2025-05-20", time: "3:00 PM - 4:00 PM", status: "Upcoming", price: "$75" },
-    { id: 2, type: "tutor", studentName: "Mark L.", subject: "AI Project Draft Review", date: "2025-05-18", time: "10:00 AM - 11:00 AM", status: "Completed", price: "$60" },
+    { id: 2, type: "tutor", studentName: "Mark L.", subject: "AI Task Draft Review", date: "2025-05-18", time: "10:00 AM - 11:00 AM", status: "Completed", price: "$60" },
     { id: 3, type: "student", tutorName: "Prof. Kenji Tanaka", subject: "Cybersecurity Basics", date: "2025-05-22", time: "5:00 PM - 5:30 PM", status: "Upcoming", needsPayment: true, price: "$40" },
   ];
   // const appointments = []; // Test empty state

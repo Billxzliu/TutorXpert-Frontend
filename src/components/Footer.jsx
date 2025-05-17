@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center">
               <Zap className="h-8 w-8 text-primary mr-2 tech-glow" />
-              <h3 className="text-2xl font-bold animated-gradient-text">TutorXpert</h3>
+              <h3 className="text-2xl font-bold animated-gradient-text">GlowUpTutors</h3>
             </div>
             <p className="text-sm text-muted-foreground">
               Connecting students with expert tutors for personalized learning experiences in the digital age.
@@ -41,7 +41,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/projects" className="text-base text-muted-foreground hover:text-foreground transition-colors">
-                  Browse Projects
+                  Browse Tasks
                 </Link>
               </li>
               <li>
@@ -104,7 +104,7 @@ const Footer = () => {
         </div>
         <div className="mt-12 border-t border-primary/20 pt-8">
           <p className="text-base text-muted-foreground text-center">
-            &copy; {new Date().getFullYear()} TutorXpert. All rights reserved. Powered by FutureTech.
+            &copy; {new Date().getFullYear()} GlowUpTutors. All rights reserved. Powered by FutureTech.
           </p>
         </div>
       </div>

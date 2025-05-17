@@ -155,7 +155,7 @@ const PaymentMethodsPage = () => {
           <div className="text-center py-20 glass-effect rounded-xl shadow-2xl">
             <CreditCard className="h-20 w-20 mx-auto text-primary/50 mb-6" />
             <h3 className="text-2xl font-semibold mb-3 text-primary">No Payment Methods Added</h3>
-            <p className="text-muted-foreground">Add a card to get started with payments on TutorXpert.</p>
+            <p className="text-muted-foreground">Add a card to get started with payments on GlowUpTutors.</p>
           </div>
         ) : (
           <div className="space-y-6">
