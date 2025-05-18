@@ -1,4 +1,3 @@
-// TasksPage.jsx - with distance filter and scroll fix
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -187,8 +186,13 @@ const TasksPage = () => {
         <div className="flex flex-col md:flex-row gap-6 h-[700px]">
           <motion.div className="w-full md:w-[400px] overflow-y-auto space-y-6 pr-2">
             {filteredTasks.map(task => (
-              <motion.div key={task.id} ref={el => taskRefs.current[task.id] = el}>
-                <Card className="h-full flex flex-col card-hover glass-effect">
+              <motion.div
+                key={task.id}
+                ref={el => taskRefs.current[task.id] = el}
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 200 }}
+              >
+                <Card className="h-full flex flex-col bg-background/70 backdrop-blur-lg border border-blue-400/30 shadow-lg rounded-2xl hover:shadow-2xl transition-shadow duration-300">
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
@@ -199,21 +203,23 @@ const TasksPage = () => {
                       </div>
                       <Badge variant={task.status === "Open" ? "success" : "secondary"}>{task.status}</Badge>
                     </div>
-                    <Badge variant="outline" className="mt-2 inline-block">{task.subject}</Badge>
+                    <Badge className="bg-blue-900/40 text-blue-300 border border-blue-400/30 rounded-full px-3 py-1 mt-2 w-fit">
+                      {task.subject}
+                    </Badge>
                   </CardHeader>
                   <CardContent className="py-2 flex-grow">
-                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{task.description}</p>
+                    <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-3">{task.description}</p>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
                       <div className="flex items-center text-muted-foreground">
-                        <DollarSign className="h-4 w-4 text-primary/70 mr-2" />
+                        <DollarSign className="h-4 w-4 text-blue-400 mr-2" />
                         <span>${task.budget}</span>
                       </div>
                       <div className="flex items-center text-muted-foreground">
-                        <Calendar className="h-4 w-4 text-primary/70 mr-2" />
+                        <Calendar className="h-4 w-4 text-blue-400 mr-2" />
                         <span>{task.deadline}</span>
                       </div>
                       <div className="flex items-center text-muted-foreground">
-                        <BookOpen className="h-4 w-4 text-primary/70 mr-2" />
+                        <BookOpen className="h-4 w-4 text-blue-400 mr-2" />
                         <span>{task.location}</span>
                       </div>
                     </div>
@@ -222,8 +228,16 @@ const TasksPage = () => {
                     <Button variant="outline" className="flex-1" asChild>
                       <Link to={`/projects/${task.id}`}>View Details</Link>
                     </Button>
-                    <Button className="flex-1" onClick={() => toast({ title: "Application Submitted", description: `You have expressed interest in \"${task.title}\".` })}>
-                      Apply Now <Zap className="ml-2 h-4 w-4" />
+                    <Button
+                      className="flex-1"
+                      onClick={() =>
+                        toast({
+                          title: "Application Submitted",
+                          description: `You have expressed interest in "${task.title}".`,
+                        })
+                      }
+                    >
+                      Apply Now <Zap className="ml-2 h-4 w-4 text-blue-400" />
                     </Button>
                   </CardFooter>
                 </Card>
