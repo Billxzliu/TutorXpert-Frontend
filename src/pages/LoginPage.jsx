@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LoginPage = () => {
   const { toast } = useToast();
@@ -20,14 +21,17 @@ const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+
     if (!formData.email || !formData.password) {
       toast({
         title: "Error",
@@ -38,33 +42,35 @@ const LoginPage = () => {
       return;
     }
 
-    setTimeout(() => {
-      if (formData.email.includes("error")) {
-        toast({
-          title: "Login Failed",
-          description: "Invalid email or password.",
-          variant: "destructive",
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          email: formData.email,
-          name: formData.email.split("@")[0],
-          isLoggedIn: true,
-        })
-      );
+    try {
+      const response = await axios.post(`${baseUrl}/students/login`, {
+        email: formData.email,
+        password: formData.password
+      });
 
       toast({
         title: "Welcome back!",
         description: "You have successfully logged in.",
+        className: "bg-card border-primary/50 text-foreground"
       });
-      setIsSubmitting(false);
-      navigate("/");
-    }, 1500);
+
+      localStorage.setItem("user", JSON.stringify({
+        email: formData.email,
+        student_id: response.data.student_id,
+        isLoggedIn: true,
+        role: "Student"
+      }));
+
+      navigate("/dashboard");
+    } catch (error) {
+    toast({
+      title: "Authentication Error",
+      description: "The email or password is incorrect. Please try again.",
+      variant: "destructive",
+    });
+    setIsSubmitting(false);
+  }
+
   };
 
   const fadeIn = {
