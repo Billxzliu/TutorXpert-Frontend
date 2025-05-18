@@ -1,3 +1,4 @@
+// TasksPage.jsx - with distance filter and scroll fix
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -6,21 +7,22 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Filter, Calendar, DollarSign, BookOpen, Zap, PlusCircle } from "lucide-react";
+import { Search, Calendar, DollarSign, BookOpen, Zap, PlusCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import mockTasks from "@/data/mockTasks";
+import TaskMapView from "@/components/TaskMapView";
 
-const cityCoordinates = {
-  "Sydney, Australia": { top: "53.5%", left: "76.5%" },
-  "Melbourne, Australia": { top: "72.2%", left: "77.5%" },
-  "Brisbane, Australia": { top: "44%", left: "75.5%" },
-  "Adelaide, Australia": { top: "65.2%", left: "64.2%" },
-  "Canberra, Australia": { top: "61.5%", left: "73.4%" },
-  "Perth, Australia": { top: "66.1%", left: "30.5%" },
-  "Darwin, Australia": { top: "24.5%", left: "50.8%" },
-  "Hobart, Australia": { top: "86.2%", left: "80.3%" },
-  "Gold Coast, Australia": { top: "49.2%", left: "77.2%" }
+const getDistanceFromLatLng = (lat1, lng1, lat2, lng2) => {
+  const toRad = x => (x * Math.PI) / 180;
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 };
 
 const TasksPage = () => {
@@ -30,21 +32,42 @@ const TasksPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
   const [budgetFilter, setBudgetFilter] = useState("");
+  const [distanceFilter, setDistanceFilter] = useState("");
+  const [userPosition, setUserPosition] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const taskRefs = useRef({});
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       setTasks(mockTasks);
       setFilteredTasks(mockTasks);
       setIsLoading(false);
     }, 1000);
-    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
     filterTasks();
-  }, [searchTerm, subjectFilter, budgetFilter, tasks]);
+  }, [searchTerm, subjectFilter, budgetFilter, distanceFilter, tasks, userPosition]);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const coords = [pos.coords.latitude, pos.coords.longitude];
+          setUserPosition(coords);
+        },
+        (err) => {
+          console.warn("Geolocation error:", err);
+          toast({
+            title: "Location Access Denied",
+            description: "We couldn't access your location. The map may be less personalized.",
+            variant: "destructive",
+          });
+        },
+        { timeout: 10000 }
+      );
+    }
+  }, [toast]);
 
   const filterTasks = () => {
     let tempFiltered = [...tasks];
@@ -65,36 +88,37 @@ const TasksPage = () => {
         return pMax >= min && (max ? pMin <= max : true);
       });
     }
+    if (distanceFilter && userPosition) {
+      const maxDistance = parseFloat(distanceFilter);
+      tempFiltered = tempFiltered.filter(t => {
+        return getDistanceFromLatLng(userPosition[0], userPosition[1], t.lat, t.lng) <= maxDistance;
+      });
+    }
     setFilteredTasks(tempFiltered);
   };
 
   const handleSearch = e => setSearchTerm(e.target.value);
-  const handleSubjectFilter = value => setSubjectFilter(value);
-  const handleBudgetFilter = value => setBudgetFilter(value);
-
-  const handleApplyToTask = (taskTitle) => {
-    toast({
-      title: "Application Submitted",
-      description: `You have expressed interest in "${taskTitle}". The task poster will be notified.`,
-      duration: 5000,
-      className: "bg-card border-primary/50 text-foreground",
-    });
-  };
+  const handleSubjectFilter = setSubjectFilter;
+  const handleBudgetFilter = setBudgetFilter;
+  const handleDistanceFilter = setDistanceFilter;
 
   const scrollToCard = (taskId) => {
     const target = taskRefs.current[taskId];
-    if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (target) {
+      const scrollY = window.scrollY;
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+      window.scrollTo({ top: scrollY });
+      target.classList.add("ring", "ring-primary");
+      setTimeout(() => target.classList.remove("ring", "ring-primary"), 2000);
+    }
   };
-
-  const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } };
-  const staggerContainer = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } } };
 
   const allSubjects = [...new Set(tasks.map(t => t.subject))].sort();
 
   return (
     <div className="min-h-screen bg-background text-foreground py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div initial="hidden" animate="visible" variants={fadeIn} className="text-center mb-12">
+        <motion.div initial="hidden" animate="visible" className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 animated-gradient-text">Explore Student Tasks</h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Browse exciting student-led tasks looking for skilled collaborators. Help shape innovative outcomes.
@@ -106,22 +130,22 @@ const TasksPage = () => {
           </div>
         </motion.div>
 
-        <motion.div initial="hidden" animate="visible" variants={fadeIn} className="glass-effect p-6 mb-10 rounded-xl shadow-2xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+        <motion.div initial="hidden" animate="visible" className="glass-effect p-6 mb-10 rounded-xl shadow-2xl">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
             <div>
               <Label htmlFor="search" className="mb-2 block text-primary">Search Tasks</Label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-primary/70" />
-                <Input id="search" placeholder="Search by title, skills, or subject..." className="pl-10 bg-input border-primary/30 focus:border-primary focus:ring-primary" value={searchTerm} onChange={handleSearch} />
+                <Input id="search" placeholder="Search by title, skills, or subject..." className="pl-10 border border-blue-500 text-blue-300 placeholder:text-blue-400 focus:ring-blue-500 focus:border-blue-500" value={searchTerm} onChange={handleSearch} />
               </div>
             </div>
             <div>
               <Label htmlFor="subject" className="mb-2 block text-primary">Filter by Subject</Label>
               <Select onValueChange={handleSubjectFilter} value={subjectFilter}>
-                <SelectTrigger id="subject" className="bg-input border-primary/30 focus:border-primary focus:ring-primary">
+                <SelectTrigger id="subject" className="border border-blue-500 text-blue-300 focus:ring-blue-500 focus:border-blue-500">
                   <SelectValue placeholder="Choose a subject area" />
                 </SelectTrigger>
-                <SelectContent className="bg-card border-primary/50">
+                <SelectContent className="bg-background border-blue-500 text-blue-300">
                   <SelectItem value="">All Subjects</SelectItem>
                   {allSubjects.map((s, i) => <SelectItem key={i} value={s}>{s}</SelectItem>)}
                 </SelectContent>
@@ -130,10 +154,10 @@ const TasksPage = () => {
             <div>
               <Label htmlFor="budget" className="mb-2 block text-primary">Budget</Label>
               <Select onValueChange={handleBudgetFilter} value={budgetFilter}>
-                <SelectTrigger id="budget" className="bg-input border-primary/30 focus:border-primary focus:ring-primary">
+                <SelectTrigger id="budget" className="border border-blue-500 text-blue-300 focus:ring-blue-500 focus:border-blue-500">
                   <SelectValue placeholder="Select budget range" />
                 </SelectTrigger>
-                <SelectContent className="bg-card border-primary/50">
+                <SelectContent className="bg-background border-blue-500 text-blue-300">
                   <SelectItem value="">Any</SelectItem>
                   <SelectItem value="0-100">$0 - $100</SelectItem>
                   <SelectItem value="100-200">$100 - $200</SelectItem>
@@ -142,13 +166,28 @@ const TasksPage = () => {
                 </SelectContent>
               </Select>
             </div>
+            <div>
+              <Label htmlFor="distance" className="mb-2 block text-primary">Max Distance (km)</Label>
+              <Select onValueChange={handleDistanceFilter} value={distanceFilter}>
+                <SelectTrigger id="distance" className="border border-blue-500 text-blue-300 focus:ring-blue-500 focus:border-blue-500">
+                  <SelectValue placeholder="Select range" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border-blue-500 text-blue-300">
+                  <SelectItem value="">Any</SelectItem>
+                  <SelectItem value="5">Within 5 km</SelectItem>
+                  <SelectItem value="10">Within 10 km</SelectItem>
+                  <SelectItem value="20">Within 20 km</SelectItem>
+                  <SelectItem value="50">Within 50 km</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </motion.div>
 
         <div className="flex flex-col md:flex-row gap-6 h-[700px]">
-          <motion.div variants={staggerContainer} className="w-full md:w-[400px] overflow-y-auto space-y-6 pr-2">
+          <motion.div className="w-full md:w-[400px] overflow-y-auto space-y-6 pr-2">
             {filteredTasks.map(task => (
-              <motion.div key={task.id} variants={fadeIn} ref={el => taskRefs.current[task.id] = el}>
+              <motion.div key={task.id} ref={el => taskRefs.current[task.id] = el}>
                 <Card className="h-full flex flex-col card-hover glass-effect">
                   <CardHeader>
                     <div className="flex justify-between items-start">
@@ -183,7 +222,7 @@ const TasksPage = () => {
                     <Button variant="outline" className="flex-1" asChild>
                       <Link to={`/projects/${task.id}`}>View Details</Link>
                     </Button>
-                    <Button className="flex-1" onClick={() => handleApplyToTask(task.title)}>
+                    <Button className="flex-1" onClick={() => toast({ title: "Application Submitted", description: `You have expressed interest in \"${task.title}\".` })}>
                       Apply Now <Zap className="ml-2 h-4 w-4" />
                     </Button>
                   </CardFooter>
@@ -192,22 +231,8 @@ const TasksPage = () => {
             ))}
           </motion.div>
 
-          <div className="relative flex-1 rounded-xl overflow-hidden">
-            <img src="/map.png" alt="Australia Map" className="w-full h-full object-contain" />
-            {filteredTasks.map(task => {
-              const coords = cityCoordinates[task.location];
-              if (!coords) return null;
-              return (
-                <div
-                  key={task.id}
-                  onClick={() => scrollToCard(task.id)}
-                  className="absolute bg-primary text-background text-xs px-3 py-1 rounded-full font-semibold shadow-md cursor-pointer hover:bg-secondary"
-                  style={{ top: coords.top, left: coords.left, transform: 'translate(-50%, -50%)', whiteSpace: 'nowrap' }}
-                >
-                  {task.subject}
-                </div>
-              );
-            })}
+          <div className="relative flex-1 rounded-xl overflow-hidden shadow-2xl">
+            <TaskMapView tasks={filteredTasks} onTaskClick={scrollToCard} userPosition={userPosition} />
           </div>
         </div>
       </div>

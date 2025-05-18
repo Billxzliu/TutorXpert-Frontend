@@ -6,22 +6,23 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Filter, Star, Clock, BookOpen, Award, Zap, ChevronDown } from "lucide-react";
+import { Search, Star, Clock, Award, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import mockTutors from "@/data/mockTutors";
-import mapBg from "/public/map.png";
+import MapView from "@/components/MapView";
 
-const cityCoordinates = {
-  "Sydney, Australia": { top: "55%", left: "75%" },
-  "Melbourne, Australia": { top: "70%", left: "77%" },
-  "Brisbane, Australia": { top: "45%", left: "75%" },
-  "Adelaide, Australia": { top: "65%", left: "65%" },
-  "Canberra, Australia": { top: "60%", left: "73%" },
-  "Perth, Australia": { top: "65%", left: "30%" },
-  "Darwin, Australia": { top: "25%", left: "50%" },
-  "Hobart, Australia": { top: "85%", left: "80%" },
-  "Gold Coast, Australia": { top: "50%", left: "77%" }
+const getDistanceKm = (lat1, lon1, lat2, lon2) => {
+  const R = 6371;
+  const toRad = deg => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 };
 
 const TutorsPage = () => {
@@ -31,6 +32,8 @@ const TutorsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
   const [ratingFilter, setRatingFilter] = useState("");
+  const [distanceFilter, setDistanceFilter] = useState("");
+  const [userPosition, setUserPosition] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const cardRefs = useRef({});
@@ -45,8 +48,17 @@ const TutorsPage = () => {
   }, []);
 
   useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        pos => setUserPosition([pos.coords.latitude, pos.coords.longitude]),
+        err => console.warn("Location access denied:", err.message)
+      );
+    }
+  }, []);
+
+  useEffect(() => {
     filterTutors();
-  }, [searchTerm, subjectFilter, ratingFilter, tutors]);
+  }, [searchTerm, subjectFilter, ratingFilter, distanceFilter, tutors, userPosition]);
 
   const filterTutors = () => {
     let tempFiltered = [...tutors];
@@ -62,6 +74,14 @@ const TutorsPage = () => {
     }
     if (ratingFilter) {
       tempFiltered = tempFiltered.filter(t => t.rating >= parseFloat(ratingFilter));
+    }
+    if (distanceFilter && userPosition) {
+      const maxKm = parseFloat(distanceFilter);
+      tempFiltered = tempFiltered.filter(tutor => {
+        if (typeof tutor.lat !== "number" || typeof tutor.lng !== "number") return false;
+        const dist = getDistanceKm(userPosition[0], userPosition[1], tutor.lat, tutor.lng);
+        return dist <= maxKm;
+      });
     }
     setFilteredTutors(tempFiltered);
   };
@@ -82,7 +102,9 @@ const TutorsPage = () => {
   const handleMapClick = (id) => {
     const element = cardRefs.current[id];
     if (element) {
+      const scrollY = window.scrollY;
       element.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.scrollTo({ top: scrollY });
       element.classList.add("ring", "ring-primary");
       setTimeout(() => element.classList.remove("ring", "ring-primary"), 2000);
     }
@@ -104,7 +126,7 @@ const TutorsPage = () => {
         </motion.div>
 
         <motion.div initial="hidden" animate="visible" variants={fadeIn} className="glass-effect p-6 mb-10 rounded-xl shadow-2xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
             <div>
               <Label htmlFor="search" className="mb-2 block text-primary">Search Keywords</Label>
               <div className="relative">
@@ -138,6 +160,21 @@ const TutorsPage = () => {
                 </SelectContent>
               </Select>
             </div>
+            <div>
+              <Label htmlFor="distance" className="mb-2 block text-primary">Distance (km)</Label>
+              <Select onValueChange={setDistanceFilter} value={distanceFilter}>
+                <SelectTrigger id="distance" className="bg-input border-primary/30 focus:border-primary focus:ring-primary">
+                  <SelectValue placeholder="Select range" />
+                </SelectTrigger>
+                <SelectContent className="bg-card border-primary/50">
+                  <SelectItem value="">All Distances</SelectItem>
+                  <SelectItem value="5">Within 5 km</SelectItem>
+                  <SelectItem value="10">Within 10 km</SelectItem>
+                  <SelectItem value="20">Within 20 km</SelectItem>
+                  <SelectItem value="50">Within 50 km</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </motion.div>
 
@@ -164,7 +201,7 @@ const TutorsPage = () => {
                       </div>
                     </div>
                     <div className="flex flex-wrap gap-2 mb-2">
-                      {tutor.subjects.slice(0,3).map((s, i) => <Badge key={i} variant="secondary">{s}</Badge>)}
+                      {tutor.subjects.slice(0, 3).map((s, i) => <Badge key={i} variant="secondary">{s}</Badge>)}
                       {tutor.subjects.length > 3 && <Badge variant="outline">+{tutor.subjects.length - 3} more</Badge>}
                     </div>
                   </CardHeader>
@@ -195,21 +232,7 @@ const TutorsPage = () => {
           </motion.div>
 
           <div className="relative flex-1 rounded-xl overflow-hidden shadow-2xl">
-            <img src="/map.png" alt="Australia Map" className="w-full h-full object-cover" />
-            {filteredTutors.map(tutor => {
-              const coords = cityCoordinates[tutor.location];
-              if (!coords) return null;
-              return (
-                <div
-                  key={tutor.id}
-                  className="absolute text-xs text-white bg-primary px-2 py-1 rounded-full shadow-lg transform -translate-x-1/2 -translate-y-1/2 cursor-pointer hover:scale-110 hover:ring-2 hover:ring-secondary"
-                  style={{ top: coords.top, left: coords.left }}
-                  onClick={() => handleMapClick(tutor.id)}
-                >
-                  {tutor.subjects[0]}
-                </div>
-              );
-            })}
+            <MapView tutors={filteredTutors} onTutorClick={handleMapClick} />
           </div>
         </div>
       </div>
