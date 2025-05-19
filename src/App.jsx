@@ -1,4 +1,3 @@
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
@@ -27,12 +26,12 @@ import MyAppointmentsPage from "@/pages/dashboard/MyAppointmentsPage";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import NotFoundPage from "@/pages/NotFoundPage";
 import ProfilePage from "@/pages/dashboard/ProfilePage";
-
-
+import ScrollToTop from "@/components/ScrollToTop";
 
 const App = () => {
   return (
     <Router>
+      <ScrollToTop />
       <div className="flex flex-col min-h-screen bg-background">
         <Navbar />
         <main className="flex-grow">
@@ -50,7 +49,7 @@ const App = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
 
-            {/* Protected Routes (Require Login) */}
+            {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/dashboard/favourites" element={<MyFavouritesPage />} />
@@ -63,8 +62,8 @@ const App = () => {
               <Route path="/projects/new" element={<NewTaskPage />} />
               {/* <Route path="/pay/:appointmentId" element={<PayPage />} /> */}
             </Route>
-            
-            {/* Catch-all for 404 Not Found */}
+
+            {/* 404 */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>

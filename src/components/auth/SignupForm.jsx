@@ -99,50 +99,61 @@ const SignupForm = () => {
       return;
     }
 
+  try {
+    const response = await axios.post(`${baseUrl}/students/register`, {
+      email: formData.email,
+      password: formData.password,
+      role: formData.userType,
+      first_name: formData.firstName,
+      last_name: formData.lastName,
+      phone_number: formData.phone,
+      address: formData.address,
+      education_level: formData.educationLevel,
+      major: formData.major,
+      certifications: formData.certifications,
+      working_with_children_check: formData.childrenCheck,
+      subjects: formData.subjects,
+      has_experience: formData.hasExperience,
+      experience_details: formData.experienceDetail,
+      availability: formData.availableTimes,
+      accepts_short_notice: formData.acceptShortNotice
+    });
+
+    toast({
+      title: "Registration Successful",
+      description: "Welcome to GlowUpTutors!",
+      className: "bg-card border-primary/50 text-foreground"
+    });
+
+    // ✅ 先构建基本 user 对象
+    const userData = {
+      id: response.data.id,
+      email: response.data.email,
+      role: response.data.role,
+      isLoggedIn: true
+    };
+
+    // ✅ 拉取 profile 信息补充 firstName
     try {
-      const response = await axios.post(`${baseUrl}/students/register`, {
-        email: formData.email,
-        password: formData.password,
-        role: formData.userType,
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        phone_number: formData.phone,
-        address: formData.address,
-        education_level: formData.educationLevel,
-        major: formData.major,
-        certifications: formData.certifications,
-        working_with_children_check: formData.childrenCheck,
-        subjects: formData.subjects,
-        has_experience: formData.hasExperience,
-        experience_details: formData.experienceDetail,
-        availability: formData.availableTimes,
-        accepts_short_notice: formData.acceptShortNotice
-      });
-
-      toast({
-        title: "Registration Successful",
-        description: "Welcome to GlowUpTutors!",
-        className: "bg-card border-primary/50 text-foreground"
-      });
-
-      localStorage.setItem("user", JSON.stringify({
-        id: response.data.id,
-        email: response.data.email,
-        name: `${formData.firstName} ${formData.lastName}`,
-        role: response.data.role,
-        isLoggedIn: true
-      }));
-
-      navigate("/dashboard");
-    } catch (error) {
-      toast({
-        title: "Registration Failed",
-        description: error.response?.data?.detail || "Something went wrong.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
+      const profileRes = await axios.get(`${baseUrl}/profiles/${response.data.id}`);
+      userData.firstName = profileRes.data.first_name || "User";
+    } catch (e) {
+      userData.firstName = "User";
+      console.warn("⚠️ Failed to fetch profile info, fallback to 'User'");
     }
+
+    // ✅ 存入 localStorage 并跳转
+    localStorage.setItem("user", JSON.stringify(userData));
+    navigate("/dashboard");
+
+  } catch (error) {
+    toast({
+      title: "Registration Failed",
+      description: error.response?.data?.detail || "Something went wrong.",
+      variant: "destructive"
+    });
+  }
+
   };
 
   return (
