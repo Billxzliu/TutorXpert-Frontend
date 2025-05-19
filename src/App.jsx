@@ -26,6 +26,9 @@ import MyAppointmentsPage from "@/pages/dashboard/MyAppointmentsPage";
 // import PayPage from "@/pages/PayPage";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import NotFoundPage from "@/pages/NotFoundPage";
+import ProfilePage from "@/pages/dashboard/ProfilePage";
+
+
 
 const App = () => {
   return (
@@ -56,6 +59,7 @@ const App = () => {
               <Route path="/dashboard/bids" element={<MyBidsPage />} />
               <Route path="/dashboard/listings" element={<MyListingsPage />} />
               <Route path="/dashboard/appointments" element={<MyAppointmentsPage />} />
+              <Route path="/dashboard/profile" element={<ProfilePage />} />
               <Route path="/projects/new" element={<NewTaskPage />} />
               {/* <Route path="/pay/:appointmentId" element={<PayPage />} /> */}
             </Route>

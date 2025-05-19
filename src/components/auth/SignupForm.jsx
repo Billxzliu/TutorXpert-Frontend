@@ -18,16 +18,6 @@ import { motion } from "framer-motion";
 import { UserPlus } from "lucide-react";
 import axios from "axios";
 
-const getPasswordStrength = (password) => {
-  let strength = 0;
-  if (password.length >= 8) strength++;
-  if (/[a-z]/.test(password)) strength++;
-  if (/[A-Z]/.test(password)) strength++;
-  if (/\d/.test(password)) strength++;
-  if (/[^a-zA-Z0-9]/.test(password)) strength++;
-  return strength;
-};
-
 const SignupForm = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -109,103 +99,102 @@ const SignupForm = () => {
       return;
     }
 
-    if (formData.userType === "student") {
-      try {
-        const response = await axios.post(`${baseUrl}/students/register`, {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-          password: formData.password,
-          role: "Student"
-        });
+    try {
+      const response = await axios.post(`${baseUrl}/students/register`, {
+        email: formData.email,
+        password: formData.password,
+        role: formData.userType,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        phone_number: formData.phone,
+        address: formData.address,
+        education_level: formData.educationLevel,
+        major: formData.major,
+        certifications: formData.certifications,
+        working_with_children_check: formData.childrenCheck,
+        subjects: formData.subjects,
+        has_experience: formData.hasExperience,
+        experience_details: formData.experienceDetail,
+        availability: formData.availableTimes,
+        accepts_short_notice: formData.acceptShortNotice
+      });
 
-        toast({
-          title: "Registration Successful",
-          description: "Welcome to GlowUpTutors!",
-          className: "bg-card border-primary/50 text-foreground"
-        });
+      toast({
+        title: "Registration Successful",
+        description: "Welcome to GlowUpTutors!",
+        className: "bg-card border-primary/50 text-foreground"
+      });
 
-        localStorage.setItem("user", JSON.stringify({
-          id: response.data.id,
-          email: response.data.email,
-          name: `${response.data.first_name} ${response.data.last_name}`,
-          role: response.data.role,
-          isLoggedIn: true
-        }));
+      localStorage.setItem("user", JSON.stringify({
+        id: response.data.id,
+        email: response.data.email,
+        name: `${formData.firstName} ${formData.lastName}`,
+        role: response.data.role,
+        isLoggedIn: true
+      }));
 
-        navigate("/dashboard");
-      } catch (error) {
-        toast({
-          title: "Registration Failed",
-          description: error.response?.data?.detail || "Something went wrong.",
-          variant: "destructive"
-        });
-      } finally {
-        setIsSubmitting(false);
-      }
-      return;
+      navigate("/dashboard");
+    } catch (error) {
+      toast({
+        title: "Registration Failed",
+        description: error.response?.data?.detail || "Something went wrong.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
-  const inputStyles = "bg-input border-primary/30 focus:border-primary focus:ring-primary placeholder:text-muted-foreground/70";
-  const labelStyles = "text-primary/90 font-medium";
-  const passwordStrength = getPasswordStrength(formData.password);
-  const strengthText = ["Very Weak", "Weak", "Fair", "Good", "Strong", "Very Strong"];
-  const strengthColor = ["bg-red-400", "bg-orange-400", "bg-yellow-400", "bg-lime-400", "bg-green-500", "bg-emerald-600"];
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }}>
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* name fields */}
+
+        {/* Name */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
           <div className="space-y-1">
-            <Label htmlFor="firstName" className={labelStyles}>First Name *</Label>
-            <Input id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} required className={inputStyles} />
+            <Label htmlFor="firstName">First Name *</Label>
+            <Input id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} required />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="lastName" className={labelStyles}>Last Name *</Label>
-            <Input id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required className={inputStyles} />
+            <Label htmlFor="lastName">Last Name *</Label>
+            <Input id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required />
           </div>
         </div>
 
-        {/* email */}
+        {/* Email */}
         <div className="space-y-1">
-          <Label htmlFor="email" className={labelStyles}>Email Address *</Label>
-          <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required className={inputStyles} />
+          <Label htmlFor="email">Email Address *</Label>
+          <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
         </div>
 
-        {/* password fields */}
+        {/* Password */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
           <div className="space-y-1">
-            <Label htmlFor="password" className={labelStyles}>Password *</Label>
-            <Input id="password" name="password" type="password" value={formData.password} onChange={handleChange} required className={inputStyles} />
-            <div className="h-2 rounded bg-muted overflow-hidden mt-1">
-              <div className={`h-full ${strengthColor[passwordStrength]} transition-all`} style={{ width: `${(passwordStrength / 5) * 100}%` }}></div>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">{strengthText[passwordStrength]}</p>
+            <Label htmlFor="password">Password *</Label>
+            <Input id="password" name="password" type="password" value={formData.password} onChange={handleChange} required />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="confirmPassword" className={labelStyles}>Confirm Password *</Label>
-            <Input id="confirmPassword" name="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleChange} required className={inputStyles} />
+            <Label htmlFor="confirmPassword">Confirm Password *</Label>
+            <Input id="confirmPassword" name="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleChange} required />
           </div>
         </div>
 
-        {/* user type */}
+        {/* User Type */}
         <div className="space-y-1">
-          <Label htmlFor="userType" className={labelStyles}>Select Role *</Label>
+          <Label htmlFor="userType">Select Role *</Label>
           <Select onValueChange={(value) => handleSelectChange("userType", value)} value={formData.userType} required>
-            <SelectTrigger id="userType" className={inputStyles}>
+            <SelectTrigger id="userType">
               <SelectValue placeholder="Choose your role in the network" />
             </SelectTrigger>
-            <SelectContent className="bg-card border-primary/50">
+            <SelectContent>
               <SelectItem value="student">Student</SelectItem>
               <SelectItem value="tutor">Tutor</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        {/* tutor extra fields */}
-        {formData.userType === 'tutor' && (
+        {/* Tutor extra fields */}
+        {formData.userType === "tutor" && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
@@ -222,7 +211,7 @@ const SignupForm = () => {
           </motion.div>
         )}
 
-        {/* submit */}
+        {/* Submit */}
         <div className="pt-6">
           <Button type="submit" className="w-full py-3 text-base" disabled={isSubmitting}>
             {isSubmitting ? (

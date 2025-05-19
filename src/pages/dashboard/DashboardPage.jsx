@@ -17,8 +17,8 @@ const DashboardPage = () => {
     visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
   };
 
-  const user = JSON.parse(localStorage.getItem("user")) || { firstName: "User", userType: "student" };
-  const isTutor = user.userType === "tutor";
+  const user = JSON.parse(localStorage.getItem("user")) || { firstName: "User", role: "student" };
+  const isTutor = user.role === "tutor";
 
   const studentQuickLinks = [
     { name: "Find a Tutor", path: "/tutors", icon: Search, color: "text-blue-400" },

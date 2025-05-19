@@ -54,12 +54,14 @@ const LoginPage = () => {
         className: "bg-card border-primary/50 text-foreground"
       });
 
-      localStorage.setItem("user", JSON.stringify({
-        email: formData.email,
-        student_id: response.data.student_id,
-        isLoggedIn: true,
-        role: "Student"
-      }));
+     localStorage.setItem("user", JSON.stringify({
+      id: response.data.id,
+      email: response.data.email,
+      role: response.data.role?.toLowerCase() || "student",
+      isLoggedIn: true,
+      firstName: response.data.first_name || "User"
+    }));
+
 
       navigate("/dashboard");
     } catch (error) {
